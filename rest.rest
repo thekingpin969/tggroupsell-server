@@ -1,0 +1,37 @@
+GET http://localhost:3000/getGroups HTTP/1.1
+
+###
+POST http://localhost:3000/cart HTTP/1.1
+content-Type: application/json
+
+{
+    "groupId" : -1002483569139
+}
+###
+POST http://localhost:3000/createPromoCode HTTP/1.1
+content-Type: application/json
+
+{
+    "code" : "formybrother100",
+    "amount":100,
+    "type" :"singleItem",
+    "discountType":"flat"
+}
+###
+POST http://localhost:3000/invoice HTTP/1.1
+content-Type: application/json
+
+{
+    "promoCode":"formybrother100"
+}
+###
+POST http://localhost:3000/checkout HTTP/1.1
+content-Type: application/json
+
+{
+    "invoiceId":"9c3cda08-754d-4cc2-9d04-187f611bdea2",
+    "receiver":"Soulfo_x"
+}
+###
+
+GET http://localhost:3000/getReceiverInfo?username=@Prime_Nexta HTTP/1.1
