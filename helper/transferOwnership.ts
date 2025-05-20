@@ -26,7 +26,7 @@ async function transferOwnership(AssignedValidator: string) {
                 rights: { can_manage_chat: true, can_change_info: true, can_post_messages: true, can_edit_messages: true, can_delete_messages: true, can_invite_users: true, can_restrict_members: true, can_pin_messages: true, can_promote_members: true, can_manage_video_chats: true, can_post_stories: true, can_edit_stories: true, can_delete_stories: true, is_anonymous: false }
             }
         });
-        await client.invoke({ _: "transferChatOwnership", chat_id: groupId, user_id: updated_user.id, password: 'cch9szwd26' })
+        await client.invoke({ _: "transferChatOwnership", chat_id: groupId, user_id: updated_user.id, password: process.env.TELEGRAM_2FA_PASS })
 
     } catch (error) {
         console.log(error)
