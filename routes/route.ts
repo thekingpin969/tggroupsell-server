@@ -10,6 +10,8 @@ import createPromoCode from './createPromoCode';
 import checkout from './checkout';
 import invoice from './invoice';
 import getReceiverInfo from './getReceiverInfo';
+import login from './admin/login';
+import getWithdraws from './admin/getWithdraws';
 
 const router = express.Router();
 router.use(express.json())
@@ -22,6 +24,7 @@ router.get('/purchased', purchased)
 router.get('/balance', balance)
 router.get('/getCarts', getCarts)
 router.get('/getReceiverInfo', getReceiverInfo)
+router.get('/getWithdraws', getWithdraws)
 
 
 // post requests
@@ -30,5 +33,6 @@ router.post('/validatePromoCode', validatePromoCode)
 router.post('/createPromoCode', createPromoCode)
 router.post('/checkout', checkout)
 router.post('/invoice', invoice)
+router.post('/adminLogin', login)
 
 export default router

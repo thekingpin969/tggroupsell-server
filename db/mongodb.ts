@@ -75,11 +75,15 @@ class Database {
         return sum;
     }
 
-    async aggregate(query = [], collectionName) {
+    async aggregate(query: any[] = [], collectionName) {
         const collection = database.collection(collectionName);
         const result = await collection.aggregate(query).toArray();
 
         return result
+    }
+
+    async collection(collectionName: string) {
+        return database.collection(collectionName);
     }
 }
 
