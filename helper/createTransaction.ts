@@ -3,7 +3,7 @@ const db = new Database();
 
 type status = 'pending' | 'success'
 type to = 'balance' | 'pending' | 'locked' | 'total' | 'spending' | 'none'
-type type = 'withdraw' | 'groupSellReward' | 'referral' | 'deposit' | 'purchase' | 'refund'
+type type = 'withdraw' | 'groupSellReward' | 'referral' | 'deposit' | 'purchase' | 'refund' | 'adminDeposit'
 
 async function createTransactions(userId: number, amount: number, to: to, status: status = 'success', type: type = 'groupSellReward', additionalInfo = {}) {
     try {

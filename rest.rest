@@ -46,3 +46,21 @@ content-Type: application/json
 ###
 GET http://localhost:3000/getWithdraws HTTP/1.1
 ###
+
+POST http://localhost:3000/completeWithdraw HTTP/1.1
+content-Type: application/json
+
+{
+    "id" : "682f170ec3b66a13a3c52ea7",
+    "utr":100
+}
+###
+POST http://localhost:3000/admin/updateBalance HTTP/1.1
+content-Type: application/json
+
+{
+    "userId" : 1987401404,
+    "amount":100,
+    "type" :"balance"
+}
+###

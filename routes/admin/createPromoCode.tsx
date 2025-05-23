@@ -1,9 +1,9 @@
-import Database from "../db/mongodb";
+import Database from "../../db/mongodb";
 const db = new Database()
 
 async function createPromoCode(req: any, res: any) {
     try {
-        const { code, amount, type, userId = null, discountType }:
+        const { code, amount, userId = null, type, discountType }:
             { code: string; amount: number; type: 'overall' | 'singleItem'; userId: number | null; discountType: 'percentage' | 'flat' }
             = req.body
 

@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import Database from "../db/mongodb";
 import sendPayment from "./sendPayment";
 
@@ -17,7 +18,8 @@ async function clearOutPayments(groups: any[]) {
             try {
                 const { upiId } = wallets.find(item => item.userId == userId)
                 // await sendPayment(amount, upiId)
-                await db.addLogs({ ...trans, transactionId, date: new Date().getTime() }, 'withdraws')
+                const id = randomUUID()
+                await db.addLogs({ ...trans, withdrawId: id, upiId, date: new Date().getTime() }, 'withdraws')
             } catch (error) {
                 await db.updateLog({ id: { transactionId }, data: { status: 'failed', reason: error.message } }, 'transactions')
             }
