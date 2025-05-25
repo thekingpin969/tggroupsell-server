@@ -1,8 +1,18 @@
-import safeCompare from 'safe-compare'
+import rateLimit from 'express-rate-limit';
+import safeCompare from 'safe-compare';
 
-const ADMIN_PASS = process.env.ADMIN_PASS
+const ADMIN_PASS = process.env.ADMIN_PASS;
 
-async function login(req: any, res: any) {
+// Rate limiter: 10 requests per minute per IP
+const loginLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: 'Too many login attempts from this IP, please try again after a minute',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+async function loginHandler(req: any, res: any) {
     try {
         const { password = null } = req.body || {}
 
@@ -17,4 +27,4 @@ async function login(req: any, res: any) {
     }
 }
 
-export default login
+export default [loginLimiter, loginHandler];

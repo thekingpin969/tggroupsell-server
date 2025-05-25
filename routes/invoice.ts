@@ -5,13 +5,22 @@ const db = new Database()
 async function invoice(req: any, res: any) {
     try {
         const { promoCode: code = null } = req.body
-        const { id: userId } = req.tgUserData || {}
+        const { id: userId } = req.tgUserData || {} // trusted source
 
         const invoiceId = randomUUID()
 
-        const { data: [promoCode] } = code ? await db.getLogs({ code, $or: [{ userid: userId }, { userid: null }] }, 'promoCodes') : { data: [] }
+        // Validate 'code' if it's provided
+        if (code !== null && typeof code !== 'string') {
+            return res.status(400).send('Invalid promo code format.');
+        }
 
-        const { data: cartItems } = await db.getLogs({ userId }, 'carts')
+        // If code is null, query is not made based on code.
+        // If code is a string, query is { code: validatedString, $or: [...] } which is safe.
+        // userId in $or is from a trusted source.
+        const { data: [promoCode] } = code ? await db.getLogs({ code, $or: [{ userid: userId }, { userid: null }] }, 'promoCodes') : { data: [] };
+
+        // Query is { userId: trustedUserId } which is safe.
+        const { data: cartItems } = await db.getLogs({ userId }, 'carts');
         if (cartItems.length <= 0) return res.status(400).send('cart is empty')
 
         const totalPrice = cartItems.reduce((acc: number, item: any) => {
