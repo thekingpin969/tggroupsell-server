@@ -11,7 +11,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
     "express-rate-limit": "^7.5.0",
-    "mongodb": "^5.9.2",
+    "mongodb": "4.13.0",
     "node-schedule": "^2.1.1",
     "node-telegram-bot-api": "^0.66.0",
     "prebuilt-tdlib": "^0.1008049.0",
