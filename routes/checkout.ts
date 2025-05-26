@@ -7,11 +7,19 @@ const db = new Database()
 async function checkout(req: any, res: any) {
     try {
         const { invoiceId, receiver } = req.body
-        const { id: userId } = req.tgUserData || {}
+        const { id: userId } = req.tgUserData || {} // userId is from trusted source
 
         if (!invoiceId || !receiver) return res.status(400).send('missing required fields!')
 
-        const { data: [invoice] } = await db.getLogs({ invoiceId, userId, paid: false }, 'invoices')
+        // Validate invoiceId from req.body
+        if (typeof invoiceId !== 'string') { // Assuming invoiceId is a string, adjust if number
+            return res.status(400).send('Invalid invoiceId format.');
+        }
+
+        // Query is { invoiceId: validatedString, userId: trustedUserId, paid: false }
+        // This is safe as keys are hardcoded, paid is hardcoded, userId is trusted,
+        // and invoiceId is validated as a primitive string.
+        const { data: [invoice] } = await db.getLogs({ invoiceId, userId, paid: false }, 'invoices');
         if (!invoice) return res.status(404).send('invoice not fount')
         const { amount, cartItems = [] } = invoice
 

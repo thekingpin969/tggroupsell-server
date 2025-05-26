@@ -4,12 +4,21 @@ const db = new Database()
 
 async function validatePromoCode(req: any, res: any) {
     try {
-        const { id: userId } = req.tgUserData || {}
+        const { id: userId } = req.tgUserData || {} // trusted source
         const { code } = req.body || {}
-        const { data: [promoCode] } = await db.getLogs({ code, $or: [{ userid: userId }, { userid: null }] }, 'promoCodes')
+
+        // Validate 'code' from req.body
+        if (typeof code !== 'string') {
+            return res.status(400).send('Invalid promo code format. Promo code must be a string.');
+        }
+
+        // Query is { code: validatedString, $or: [...] } which is safe.
+        // userId in $or is from a trusted source.
+        const { data: [promoCode] } = await db.getLogs({ code, $or: [{ userid: userId }, { userid: null }] }, 'promoCodes');
         if (!promoCode) return res.status(404).send('invalid promo code')
 
-        const { data: cartItems } = await db.getLogs({ userId }, 'carts')
+        // Query is { userId: trustedUserId } which is safe.
+        const { data: cartItems } = await db.getLogs({ userId }, 'carts');
 
         if (cartItems.length <= 0) return res.status(400).send('cart is empty')
 

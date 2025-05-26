@@ -5,7 +5,19 @@ type status = 'pending' | 'success'
 type to = 'balance' | 'pending' | 'locked' | 'total' | 'spending' | 'none'
 type type = 'withdraw' | 'groupSellReward' | 'referral' | 'deposit' | 'purchase' | 'refund' | 'adminDeposit'
 
+const ALLOWED_TO_VALUES: to[] = ['balance', 'pending', 'locked', 'total', 'spending', 'none'];
+
 async function createTransactions(userId: number, amount: number, to: to, status: status = 'success', type: type = 'groupSellReward', additionalInfo = {}) {
+    // Validate 'to' parameter
+    if (!ALLOWED_TO_VALUES.includes(to)) {
+        throw new Error(`Invalid 'to' parameter. Must be one of: ${ALLOWED_TO_VALUES.join(', ')}`);
+    }
+
+    // Validate 'amount' parameter
+    if (typeof amount !== 'number') {
+        throw new Error("Invalid 'amount' parameter. Must be a number.");
+    }
+
     try {
         const transactionId = crypto.randomUUID();
         const data = {
